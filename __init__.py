@@ -1,8 +1,4 @@
-# Copyright: ijgnd
-#            The AnKing
-# Code License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html 
-# Background images  were obtained from Pexels.com under this license https://www.pexels.com/photo-license/
-# Gear icons were obtained from Wikimedia Commons https://commons.wikimedia.org/wiki/Category:Noto_Color_Emoji_Pie (license listed in link)
+# License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html 
 
 import os
 import random
@@ -19,10 +15,6 @@ from aqt.qt import *
 from aqt.addons import *
 from aqt.utils import openFolder 
 from .adjust_css import *
-
-QDir.addSearchPath("CustomBackground", str(Path(__file__).parent / "AnKing"))
-
-
 
 from .config import addon_path, addonfoldername, gc, getUserOption
 
@@ -148,12 +140,7 @@ def get_gearfile():
     if val in gear_list:
         return val
     else:
-        # if empty or illegal value try to use 'AnKing.png' to signal that an illegal values was
-        # used AnKing's gears folder doesn't contain a file named "gears.svg"
-        if "AnKing.png" in gear_list:
-            return "AnKing.png"
-        else:
-            return ""
+        return ""
 
 
 def replace_gears(deck_browser, content):

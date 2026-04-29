@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# Copyright: Lovac42 (much of this card heavily borrowed from the Dancing Baloney Add-on)
-# Copyright: The AnKing 
-# Also thanks to ijgnord who helped on this
-# Support: 
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 
@@ -24,16 +20,6 @@ conf = getUserOption()
 imgfolder = os.path.join(addon_path, "user_files") 
 RE_BG_IMG_EXT = "*.gif *.png *.apng *.jpg *.jpeg *.svg *.ico *.bmp *.webp *.avif"
 
-
-def getMenu(parent, menuName):
-    menu = None
-    for a in parent.form.menubar.actions():
-        if menuName == a.text():
-            menu = a.menu()
-            break
-    if not menu:
-        menu = parent.form.menubar.addMenu(menuName)
-    return menu
 
 class SettingsDialog(QDialog):
     timer = None
@@ -71,14 +57,6 @@ class SettingsDialog(QDialog):
 
         f.pushButton_randomize.clicked.connect(self.random)
         f.pushButton_imageFolder.clicked.connect(lambda: openFolder(imgfolder))
-        f.pushButton_videoTutorial.clicked.connect(lambda _:self.openWeb("video"))
-
-        f.toolButton_website.clicked.connect(lambda _:self.openWeb("anking")) 
-        f.toolButton_youtube.clicked.connect(lambda _:self.openWeb("youtube"))
-        f.toolButton_patreon.clicked.connect(lambda _:self.openWeb("patreon"))
-        f.toolButton_instagram.clicked.connect(lambda _:self.openWeb("instagram"))
-        f.toolButton_facebook.clicked.connect(lambda _:self.openWeb("facebook"))
-        f.toolButton_course.clicked.connect(lambda _:self.openWeb("course"))
 
         # Color Pickers -------------
         controller = {
@@ -285,22 +263,6 @@ class SettingsDialog(QDialog):
         color = qcolor.name()
         lineEditor.setText(color)
    
-    def openWeb(self, site):
-        if site == "anking":
-            openLink("https://www.ankingmed.com")
-        elif site == "youtube":
-            openLink("https://www.youtube.com/theanking")
-        elif site == "patreon":
-            openLink("https://www.patreon.com/ankingmed")
-        elif site == "instagram":
-            openLink("https://instagram.com/ankingmed")
-        elif site == "facebook":
-            openLink("https://facebook.com/ankingmed")
-        elif site == "video":
-            openLink("https://youtu.be/5XAq0KpU3Jc")
-        elif site == "course":
-            openLink("https://www.theanking.com/anki-mastery-course/?utm_source=anking_bg_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course")
-
     def random(self):
         f = self.form
         f.lineEdit_background.setText("random")
@@ -334,104 +296,17 @@ class SettingsDialog(QDialog):
         # Anki 2.1.28 and up no longer fully redraw the toolbar on mw reset,
         # so trigger the redraw manually:
         mw.toolbar.draw()
-        # NOTE (Glutanimate):
-        # This is not an ideal solution as forcing a full redraw might
-        # interfere with the background sync indicator and potentially other
-        # add-ons in the future. For a definitive fix please consider refactoring
-        # the add-on so that the web content is updated dynamically without
-        # having to reload the web view.
-
-
 
 
 def SettingsDialogExecute():
     SettingsDialog(mw)
     
 
-'''
-m = getMenu(mw, "&View")
-a = QAction("Custom Background and Gear Icon", mw)
-a.triggered.connect(SettingsDialogExecute)
-m.addAction(a)
-'''
-mw.addonManager.setConfigAction(__name__, SettingsDialogExecute)
-
-
-########################################
-
-
-def create_get_help_submenu(parent: QMenu) -> QMenu:
-    submenu_name = "Get Anki Help"
-    menu_options = [
-        (
-            "Online Mastery Course",
-            "https://www.theanking.com/anki-mastery-course/?utm_source=anking_bg_add-on&utm_medium=anki_add-on&utm_campaign=mastery_course",
-        ),
-        ("Daily Q and A Support", "https://www.theanking.com/anking-memberships"),
-        ("1-on-1 Tutoring", "https://www.theanking.com/anking-tutoring"),
-    ]
-    submenu = QMenu(submenu_name, parent)
-    for name, url in menu_options:
-        act = QAction(name, mw)
-        act.triggered.connect(lambda _, u=url: openLink(u))
-        submenu.addAction(act)
-    return submenu
-
-
-def maybe_add_get_help_submenu(menu: QMenu) -> None:
-    """Adds 'Get Anki Help' submenu in 'Anking' menu if needed.
-
-    The submenu is added if:
-     - The submenu does not exist in menu
-     - The submenu is an outdated version - existing is deleted
-
-    With versioning and anking_get_help property,
-    future version can rename, hide, or change contents in the submenu
-    """
-    submenu_property = "anking_get_help"
-    submenu_ver = 2
-    for act in menu.actions():
-        if act.property(submenu_property) or act.text() == "Get Anki Help":
-            ver = act.property("version")
-            if ver and ver >= submenu_ver:
-                return
-            submenu = create_get_help_submenu(menu)
-            menu.insertMenu(act, submenu)
-            menu.removeAction(act)
-            new_act = submenu.menuAction()
-            new_act.setProperty(submenu_property, True)
-            new_act.setProperty("version", submenu_ver)
-            return
-    else:
-        submenu = create_get_help_submenu(menu)
-        menu.addMenu(submenu)
-        new_act = submenu.menuAction()
-        new_act.setProperty(submenu_property, True)
-        new_act.setProperty("version", submenu_ver)
-
-
-def get_anking_menu() -> QMenu:
-    """Return AnKing menu. If it doesn't exist, create one. Make sure its submenus are up to date."""
-    menu_name = "&AnKing"
-    menubar = mw.form.menubar
-    for a in menubar.actions():
-        if menu_name == a.text():
-            menu = a.menu()
-            break
-    else:
-        menu = menubar.addMenu(menu_name)
-    maybe_add_get_help_submenu(menu)
-    return menu
-
-
-########################################
-
-
 def setupMenu():
-    menu = get_anking_menu()
     a = QAction("Custom Background and Gear Icon", mw)
     a.triggered.connect(SettingsDialogExecute)
-    menu.addAction(a)
+    mw.form.menuTools.addAction(a)
 
 
 setupMenu()
+mw.addonManager.setConfigAction(__name__, SettingsDialogExecute)

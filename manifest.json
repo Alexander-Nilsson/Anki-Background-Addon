@@ -1,10 +1,7 @@
 {
-  "min_point_version": 22,
-  "name": "Custom background 3.0",
+  "name": "Custom Background and Gear Icon",
   "package": "1210908941",
-  "mod": 1765976287,
-  "ankiweb_id": "1210908941",
-  "version": "4.6",
-  "author": "The AnKing",
-  "conflicts": []
+  "author": "Alexander Nilsson",
+  "version": "1.0",
+  "description": "Change the background and gear icon in Anki."
 }

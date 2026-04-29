@@ -1,17 +1,16 @@
 {
-    "Image name for background": "Milkyway.png",   
-    "Image name for gear": "AnKing.png",
-    "Keyboard Shortcut": "Ctrl+Shift+b",
-    "Reviewer image": true,
-    "Toolbar image": true,
-    "Toolbar top/bottom": true,
+    "Image name for background": "Milkyway.png",
+    "Image name for gear": "gears.svg",
     "background-attachment": "fixed",
-    "background-color bottom": "",
+    "background-position": "center",
+    "background-size": "cover",
     "background-color main": "",
     "background-color top": "",
+    "background-color bottom": "",
     "background opacity main": "1",
     "background opacity review": "1",
-    "background-position": "center",
     "background scale": "1",
-    "background-size": "cover"
-} 
+    "Reviewer image": true,
+    "Toolbar image": true,
+    "Toolbar top/bottom": true
+}
