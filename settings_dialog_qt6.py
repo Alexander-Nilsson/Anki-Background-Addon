@@ -61,6 +61,21 @@ class Ui_Dialog(object):
         self.pushButton_randomize.setObjectName("pushButton_randomize")
         self.gridLayout_5.addWidget(self.pushButton_randomize, 2, 1, 1, 1)
         
+        self.label_14 = QtWidgets.QLabel(self.groupBox)
+        self.label_14.setText("Background Folder:")
+        self.label_14.setObjectName("label_14")
+        self.gridLayout_5.addWidget(self.label_14, 3, 0, 1, 1)
+        
+        self.lineEdit_bgFolder = QtWidgets.QLineEdit(self.groupBox)
+        self.lineEdit_bgFolder.setReadOnly(True)
+        self.lineEdit_bgFolder.setObjectName("lineEdit_bgFolder")
+        self.gridLayout_5.addWidget(self.lineEdit_bgFolder, 3, 1, 1, 1)
+        
+        self.toolButton_bgFolder = QtWidgets.QToolButton(self.groupBox)
+        self.toolButton_bgFolder.setText("...")
+        self.toolButton_bgFolder.setObjectName("toolButton_bgFolder")
+        self.gridLayout_5.addWidget(self.toolButton_bgFolder, 3, 2, 1, 1)
+        
         self.gridLayout_6.addWidget(self.groupBox, 0, 0, 1, 2)
 
         # GroupBox for general visibility settings

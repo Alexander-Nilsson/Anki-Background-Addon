@@ -57,6 +57,7 @@ class SettingsDialog(QDialog):
 
         f.pushButton_randomize.clicked.connect(self.random)
         f.pushButton_imageFolder.clicked.connect(lambda: openFolder(imgfolder))
+        f.toolButton_bgFolder.clicked.connect(self._getBgFolder)
 
         # Color Pickers -------------
         controller = {
@@ -132,7 +133,11 @@ class SettingsDialog(QDialog):
         # LineEdits -------------
         a = f.lineEdit_background
         t = a.text()
-        a.textChanged.connect(lambda t=a.text():self._updateLineEdit(t,"Image name for background")) 
+        a.textChanged.connect(lambda t=a.text():self._updateLineEdit(t,"Image name for background"))
+
+        a = f.lineEdit_bgFolder
+        t = a.text()
+        a.textChanged.connect(lambda t=a.text():self._updateLineEdit(t,"background folder")) 
 
         a = f.lineEdit_gear
         t = a.text()
@@ -195,6 +200,9 @@ class SettingsDialog(QDialog):
         t = conf["Image name for gear"]
         f.lineEdit_gear.setText(t)
 
+        t = conf.get("background folder", "")
+        f.lineEdit_bgFolder.setText(t)
+
         t = conf["background-color main"]
         f.lineEdit_color_main.setText(t)
 
@@ -206,15 +214,27 @@ class SettingsDialog(QDialog):
 
 
     def _getFile(self, pad, lineEditor, ext=RE_BG_IMG_EXT):
+        custom_folder = conf.get("background folder", "")
+        bg_dir = custom_folder if custom_folder and os.path.isdir(custom_folder) else f"{addon_path}/user_files/background"
+
         def setWallpaper(path):
-            f = path.split("user_files/background/")[-1]
+            f = os.path.basename(path)
             lineEditor.setText(f)
 
         f = getFile(mw, "Wallpaper",
             cb=setWallpaper,
             filter=ext,
-            dir=f"{addon_path}/user_files/background"
+            dir=bg_dir
         )
+
+    def _getBgFolder(self):
+        folder = QFileDialog.getExistingDirectory(
+            mw,
+            "Select Background Wallpaper Folder",
+            conf.get("background folder", "") or f"{addon_path}/user_files/background"
+        )
+        if folder:
+            self.form.lineEdit_bgFolder.setText(folder)
 
     def _getGearFile(self, pad, lineEditor, ext=RE_BG_IMG_EXT):
         def setWallpaper(path):
